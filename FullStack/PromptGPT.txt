@@ -1,0 +1,13 @@
+Crie 10 perguntas sobre o tópico Fundamentos de JavaScript com 3 opções de respostas e uma resposta correta, para comport um aplicativo em javascript. Responda com essa estrutura de dados do exemplo abaixo:
+
+const perguntas = [
+  {
+    pergunta: "Pergunta 01",
+    respostas: [
+      "Resposta A",
+      "Resposta B",
+      "Resposta C",
+    ],
+    correta: 2
+  },
+]

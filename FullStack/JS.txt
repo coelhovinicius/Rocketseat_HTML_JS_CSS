@@ -1,0 +1,147 @@
+//Array das perguntas
+const perguntas = [
+  {
+    pergunta: "O que é JavaScript?",
+    respostas: [
+      "Uma linguagem de marcação",
+      "Uma linguagem de programação",
+      "Um banco de dados",
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "Qual é a forma correta de declarar uma variável em JavaScript?",
+    respostas: [
+      "var myVar = 5;",
+      "variable myVar = 5;",
+      "v myVar = 5;",
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "Qual é o símbolo de concatenação de strings em JavaScript?",
+    respostas: [
+      "+",
+      "&",
+      "*",
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "Como se escreve um comentário de uma única linha em JavaScript?",
+    respostas: [
+      "// Este é um comentário",
+      "/* Este é um comentário */",
+      "# Este é um comentário",
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "Qual é a função usada para arredondar um número para o inteiro mais próximo em JavaScript?",
+    respostas: [
+      "Math.floor()",
+      "Math.round()",
+      "Math.ceil()",
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "O que o método 'indexOf()' retorna quando o valor não é encontrado em uma string?",
+    respostas: [
+      "-1",
+      "null",
+      "undefined",
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "Qual é a função usada para imprimir algo no console em JavaScript?",
+    respostas: [
+      "console.print()",
+      "console.log()",
+      "print()",
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "Qual é a palavra-chave usada para declarar uma função em JavaScript?",
+    respostas: [
+      "function",
+      "define",
+      "func",
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "Qual é o operador de igualdade estrita em JavaScript?",
+    respostas: [
+      "==",
+      "===",
+      "!=",
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "Como se escreve um loop 'for' em JavaScript?",
+    respostas: [
+      "para (var i = 0; i < 10; i++) {}",
+      "for (var i = 0; i < 10; i++) {}",
+      "loop (var i = 0; i < 10; i++) {}",
+    ],
+    correta: 1
+  },
+];
+
+//Seleciona o item de id "quiz"
+const quiz = document.querySelector('#quiz')
+//Seleciona o "template"
+const template = document.querySelector('template')
+
+//
+const corretas = new Set()
+const totalDePerguntas = perguntas.length
+const mostrarTotal = document.querySelector('#acertos span')
+mostrarTotal.textContent = corretas.size + ' de ' + totalDePerguntas
+
+//Estrutura de Loop - Laço de Repetição para replicar cada pergunta
+for(const item of perguntas) {
+  //Clona cada nodo das perguntas, selecionando por "h3"
+  const quizItem = template.content.cloneNode(true)
+  quizItem.querySelector('h3').textContent = item.pergunta
+
+  //Loop para replicar as respostas, selecionando pelos "dt" de cada "dl"
+  for(let resposta of item.respostas) {
+    const dt = quizItem.querySelector('dl dt').cloneNode(true)
+    //Altera e exibe as respostas disponíveis no código HTML
+    dt.querySelector('span').textContent = resposta
+    //Pega o índice das perguntas
+    dt.querySelector('input').setAttribute('name', 'pergunta-' + perguntas.indexOf(item))
+    //Pega o índice das respostas a cada pergunta
+    dt.querySelector('input').value = item.respostas.indexOf(resposta)
+    //Roda a função de evento quando o botão radio é selecionado e/ou alterado
+    dt.querySelector('input').onchange = (event) => {
+      const estaCorreta = event.target.value == item.correta
+
+      //Exclui o item do contador (caso a resposta esteja incorreta)
+      corretas.delete(item)
+      //Caso a resposta esteja correta, adiciona o item ao contador
+      if(estaCorreta) {
+        corretas.add(item)
+      }
+      //Exibe a contagem de acertos
+      mostrarTotal.textContent = corretas.size + ' de ' + totalDePerguntas
+    }
+
+
+
+    //Faz a busca dos elementos 'dl' e atribui os elementos 'dt' como elementos "filhos"
+    quizItem.querySelector('dl').appendChild(dt)
+  }
+
+  //Remove o primeiro elemento pai "dl" de filho "dt"
+  quizItem.querySelector('dl dt').remove()
+
+  // Coloca cada pergunta na tela
+  quiz.appendChild(quizItem)
+
+}
